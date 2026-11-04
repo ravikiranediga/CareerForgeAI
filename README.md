@@ -1,95 +1,241 @@
-# CareerForge
+# CareerForge – AI-Powered Career Preparation & Job Tracking Platform
 
-**A resume-first career preparation platform for job discovery, interview practice, and application tracking.**
+**Discover opportunities. Build your skills. Prepare for interviews. Take control of your career.**
 
-CareerForge brings practical job-search and preparation tools into one application. It combines a React frontend with a FastAPI backend, uses Adzuna for India-focused job listings, and offers optional Gemini-powered feedback with user consent.
+CareerForge is a resume-first career preparation platform designed to bring job discovery, interview preparation, skill development, resume management, and application tracking together in one place.
 
-> **Project scope:** CareerForge is a portfolio and local-development project. Coding practice is intentionally practice-only, and applications are tracked by the user rather than submitted by CareerForge.
+Built with **React, FastAPI, and SQLite**, CareerForge integrates the Adzuna API for India-focused job listings and offers optional Gemini-powered resume and interview feedback with user consent.
 
-## What it does
+> **Project type:** B.Tech Final-Year Project | Full-Stack Web Application  
+> **Development status:** Portfolio and local-development project
 
-- **Build a career profile from your resume.** Upload a text-based PDF or DOCX, review extracted details, and create a resume preview from your profile. Scanned PDFs requiring OCR are not supported.
-- **Find relevant jobs.** Search Adzuna India listings, with a focus on technical and AI/ML roles in Bengaluru, Hyderabad, and Chennai. Listings link to the original posting so you can verify details and availability.
-- **Prepare at your own pace.** Practice aptitude questions, work through coding exercises, and rehearse interview answers. Coding solutions are saved as practice and are not executed or automatically scored.
-- **Get optional AI feedback.** With explicit consent, send resume text or an interview answer to Gemini for analysis or practice feedback. AI output is advisory; it is not an ATS score, hiring decision, or guarantee of results.
-- **Track applications.** Choose one of your saved resumes, confirm before continuing, and open the employer's original application page. CareerForge records the application as **Ready to apply**; update its status yourself after applying.
-- **Keep your work organized.** Save jobs, manage your profile and resumes, and review practice progress in one place.
+---
 
-## Product boundaries
+## Overview
 
-- CareerForge does **not** execute coding submissions or judge their correctness.
-- CareerForge does **not** submit applications or share resumes with employers. No authorized employer submission integration is configured.
-- Gemini features require a configured API key and your consent for each relevant submission. Provider availability, quotas, and data policies apply.
-- Resume section coverage reflects populated profile sections. It does not measure ATS compatibility or predict hiring outcomes.
-- Job data comes from Adzuna and may be cached; always check the linked employer posting for current details.
+Finding a job involves more than searching for vacancies. Candidates also need to maintain a strong resume, practice technical and aptitude questions, prepare for interviews, and keep track of applications.
 
-## Technology
+CareerForge aims to simplify this process through a unified dashboard that helps candidates organize their job search and career preparation.
 
-| Area | Technologies |
+## Key Features
+
+### 1. Career Dashboard
+- Centralized dashboard for career activities.
+- Profile completion and career-readiness indicators.
+- Quick access to job search, practice, and interview preparation.
+- Application and practice progress overview.
+
+### 2. Job Discovery
+- Search job opportunities using the Adzuna API.
+- Focus on India-based opportunities, including technical and AI/ML roles.
+- Explore listings with job details and original posting links.
+- Save interesting opportunities for later.
+
+### 3. Resume Builder & Analysis
+- Upload text-based PDF and DOCX resumes.
+- Extract resume information and build a career profile.
+- Preview resume information in an organized format.
+- Review populated resume sections and identify missing information.
+- Download or print the resume through the browser.
+
+### 4. Aptitude Preparation
+- Practice quantitative aptitude and reasoning questions.
+- Work through structured practice questions.
+- Review attempts and practice progress.
+
+### 5. Coding Practice
+- Practice programming questions and problem-solving exercises.
+- Explore languages including Python, Java, C, C++, and JavaScript.
+- Work through coding exercises at your own pace.
+
+> Coding practice is intentionally practice-only. Solutions are not executed or automatically judged.
+
+### 6. Interview Preparation
+- Practice technical and HR interview questions.
+- Prepare responses to common interview prompts.
+- Receive optional Gemini-powered feedback with explicit consent.
+
+### 7. Application Tracking
+- Track job applications through a centralized interface.
+- Maintain application statuses and review progress.
+- Select a saved resume before opening an employer's application page.
+- Update application outcomes manually.
+
+### 8. User Profile & Progress
+- Manage personal career information.
+- Maintain uploaded resumes.
+- Review practice activity and progress.
+- Keep career-related information organized.
+
+---
+
+## Technology Stack
+
+| Layer | Technologies |
 |---|---|
-| Frontend | React, React Router, Vite |
-| Backend | Python, FastAPI, Uvicorn |
-| Data | SQLite |
-| Job listings | Adzuna API |
-| Optional AI feedback | Google Gemini API |
-| Quality checks | Oxlint, Python `unittest`, Playwright |
+| Frontend | React, JavaScript, React Router |
+| Build Tool | Vite |
+| Backend | Python, FastAPI |
+| API Server | Uvicorn |
+| Database | SQLite |
+| Job Data Integration | Adzuna API |
+| AI Integration | Google Gemini API |
+| Authentication | JWT-based authentication |
+| Testing | Python unittest, Playwright |
+| Code Quality | Oxlint |
 
-## How it is structured
+---
+
+## System Architecture
+
+CareerForge follows a frontend-backend architecture.
 
 ```text
-frontend/       React application, API client, and Playwright tests
-backend/        FastAPI application, feature routers, and provider adapters
-database/       SQLite schema, initialization, and practice seed data
+                USER
+                  |
+                  v
+        REACT FRONTEND (VITE)
+                  |
+                  | HTTP / REST API
+                  v
+          FASTAPI BACKEND
+                  |
+       +----------+-----------+
+       |          |           |
+       v          v           v
+    SQLITE     ADZUNA       GEMINI
+   DATABASE      API          API
+       |
+       v
+ USER DATA, RESUMES,
+ APPLICATIONS & PROGRESS
 ```
 
-The browser communicates with the backend over `/api`. The backend handles validation, authentication, provider requests, and database access; the browser never connects directly to SQLite. In local development, Vite proxies `/api` requests to FastAPI.
+**Architecture highlights:**
+- React handles the user interface and navigation.
+- FastAPI provides backend services and REST API endpoints.
+- SQLite stores application data.
+- Adzuna supplies external job listing information.
+- Gemini provides optional AI-powered feedback.
+- The backend handles authentication, validation, database operations, and external provider requests.
 
-## Run locally on Windows
+The browser communicates with the backend through `/api`. It does not connect directly to SQLite.
+
+---
+
+## Project Structure
+
+```text
+CareerForge/
+│
+├── frontend/
+│   ├── src/
+│   ├── tests/
+│   ├── public/
+│   ├── package.json
+│   └── vite.config.js
+│
+├── backend/
+│   ├── main.py
+│   ├── requirements.txt
+│   ├── tests/
+│   └── ...
+│
+├── database/
+│   ├── schema.sql
+│   └── ...
+│
+├── .gitignore
+└── README.md
+```
+
+*The structure above is a simplified overview. Individual folders may contain additional files.*
+
+---
+
+## Getting Started
+
+Follow these steps to run CareerForge locally on Windows.
 
 ### Prerequisites
+
+Install the following:
 
 - Python 3.10 or later
 - Node.js and npm
 - Git (optional)
 
-### 1. Configure and start the backend
+### Step 1: Clone the Repository
 
-From the project root, create a virtual environment, install dependencies, and create your local environment file:
+```bash
+git clone https://github.com/ravikiranediga/CareerForgeAI.git
+cd CareerForgeAI
+```
+
+### Step 2: Set Up the Backend
+
+Create a Python virtual environment:
 
 ```powershell
 py -m venv backend\.venv
+```
+
+Install dependencies:
+
+```powershell
 backend\.venv\Scripts\python.exe -m pip install -r backend\requirements.txt
+```
+
+Create your local environment file:
+
+```powershell
 Copy-Item backend\.env.example backend\.env
 ```
 
-Set a private `CAREERFORGE_SECRET_KEY` in `backend\.env`. Generate a random value with:
+### Step 3: Configure Environment Variables
+
+Generate a secure application secret:
 
 ```powershell
 py -c "import secrets; print(secrets.token_urlsafe(32))"
 ```
 
-To enable job listings and AI features, add your own Adzuna and Gemini credentials to `backend\.env`:
+Add the generated secret to `backend\.env`.
+
+Optional provider configuration:
 
 ```dotenv
 ADZUNA_APP_ID=your-adzuna-app-id
 ADZUNA_APP_KEY=your-adzuna-app-key
+
 GEMINI_API_KEY=your-gemini-api-key
 GEMINI_MODEL=gemini-2.5-flash
 ```
 
-Adzuna listings need both Adzuna values; Gemini feedback needs a Gemini API key. These integrations are optional for running the application, but their provider-backed features will be unavailable without valid credentials.
+- Adzuna credentials enable provider-backed job listings.
+- Gemini credentials enable optional AI feedback.
+- Keep all real credentials inside `backend/.env`.
+- Never commit your `.env` file to GitHub.
 
-Start the API from the project root:
+### Step 4: Start the Backend
+
+From the project root:
 
 ```powershell
 backend\.venv\Scripts\python.exe -m uvicorn backend.main:app --reload
 ```
 
-The API runs at `http://127.0.0.1:8000`; interactive API documentation is available at `http://127.0.0.1:8000/docs`.
+Backend URL:
 
-### 2. Start the frontend
+`http://127.0.0.1:8000`
 
-In a second terminal:
+Interactive API documentation:
+
+`http://127.0.0.1:8000/docs`
+
+### Step 5: Start the Frontend
+
+Open another terminal:
 
 ```powershell
 cd frontend
@@ -97,49 +243,113 @@ npm install
 npm run dev
 ```
 
-Open the Vite URL shown in the terminal (typically `http://localhost:5173`).
+Open the local URL shown by Vite, usually:
 
-## Run checks
+`http://localhost:5173`
 
-From `frontend\`, run the frontend linter and production build:
+---
+
+## Testing & Quality Checks
+
+CareerForge includes automated checks for frontend, backend, and browser workflows.
+
+### Frontend linting
 
 ```powershell
+cd frontend
 npm run lint
+```
+
+### Production build
+
+```powershell
 npm run build
 ```
 
-Run the backend provider-adapter tests from the project root:
+### Backend tests
+
+From the project root:
 
 ```powershell
 backend\.venv\Scripts\python.exe -m unittest backend.tests.test_provider_adapters
 ```
 
-Run the Playwright browser suite from `frontend\`:
+### End-to-end browser tests
+
+From the frontend directory:
 
 ```powershell
 npm run test:e2e
 ```
 
-The browser suite uses isolated test data and provider stubs; it does not validate live provider credentials, quotas, or availability. Playwright browser binaries may need to be installed separately on a fresh machine.
+The Playwright suite uses isolated test data and provider stubs. It does not verify live provider availability or credentials.
 
-## Privacy and security
+---
 
-- Keep `backend\.env` private. Never commit API keys, passwords, tokens, or real user data.
-- Provider keys belong only in the backend environment; do not put them in frontend code or frontend environment variables.
-- Resume text and interview answers are sent to Gemini only after the user gives the relevant consent.
-- Uploaded resumes and the SQLite database are local application data and should not be published.
-- Resume records and application tracking are scoped to the authenticated user. Confirm before continuing to an employer application page.
-- For deployment, use HTTPS, set a strong private secret, configure CORS for the deployed frontend, and choose storage appropriate for production. The included SQLite setup is for local development, not a hosted production database.
+## Privacy & Security
 
-## API overview
+CareerForge follows a privacy-conscious development approach.
 
-| Feature | Example routes |
-|---|---|
-| Authentication | `POST /api/auth/register`, `POST /api/auth/login`, `GET /api/auth/me` |
-| Jobs | `GET /api/jobs`, `GET /api/jobs/{job_id}` |
-| Applications | `GET /api/applications`, `POST /api/applications`, `PATCH /api/applications/{id}` |
-| Saved jobs | `GET /api/saved-jobs`, `POST /api/saved-jobs/{job_id}`, `DELETE /api/saved-jobs/{job_id}` |
-| Profile and resumes | `GET/PATCH /api/profile`, `POST /api/profile/resume`, `GET /api/profile/resumes/{resume_id}/download` |
-| Practice | `GET /api/practice/questions`, `POST /api/practice/attempts`, `GET /api/practice/progress` |
+- API credentials are stored in backend environment variables.
+- Real `.env` files are excluded from Git.
+- Passwords are handled through backend authentication and hashing.
+- User-specific resume and application records are scoped to authenticated users.
+- Gemini requests involving resume text or interview answers require user consent.
+- Uploaded resumes and SQLite databases are local application data and must not be published.
+- Job applications are opened on the employer's original website; CareerForge does not submit them.
 
-For the complete interactive schema, start the backend and visit `/docs`.
+**Never publish API keys, passwords, authentication tokens, private resumes, or personal user data.**
+
+---
+
+## Current Project Scope & Limitations
+
+To keep the project transparent:
+
+- Job listings are supplied by Adzuna and may be cached.
+- Users must verify job availability on the original employer posting.
+- CareerForge does not automatically submit job applications.
+- Application statuses are updated manually by users.
+- Coding solutions are not executed or automatically evaluated.
+- Gemini feedback is advisory and depends on provider availability and quotas.
+- Resume section coverage is not a genuine ATS compatibility score.
+- Scanned PDFs requiring OCR are not supported.
+- The current SQLite setup is intended for local development, not production-scale hosting.
+
+---
+
+## Future Enhancements
+
+Potential future improvements include:
+
+- Authorized employer ATS integrations for application submission.
+- Employer-supported application status webhooks.
+- Optional email integration for application status detection, with explicit user consent.
+- More advanced coding evaluation through a secure execution service.
+- Additional resume templates and export formats.
+- Personalized learning recommendations.
+- Production deployment with persistent storage and monitoring.
+
+These are planned enhancements, not claims about currently implemented functionality.
+
+---
+
+## Project Information
+
+**Project Name:** CareerForge  
+**Category:** Full-Stack Web Development / Career Technology  
+**Project Level:** B.Tech Final-Year Project  
+**Frontend:** React  
+**Backend:** FastAPI  
+**Database:** SQLite
+
+**GitHub Repository:**  
+https://github.com/ravikiranediga/CareerForgeAI
+
+---
+
+## Acknowledgement
+
+CareerForge is developed as an academic and portfolio project to explore full-stack web development, external API integration, AI-assisted feedback, and practical career preparation tools.
+
+**CareerForge – Build your skills. Prepare with confidence. Move your career forward.**
