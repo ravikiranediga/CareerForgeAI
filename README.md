@@ -348,6 +348,17 @@ https://github.com/ravikiranediga/CareerForgeAI
 
 ---
 
+## 🛡️ License
+
+This project is licensed under the [MIT License](LICENSE).
+
+---
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome! Feel free to check the [issues page]
+
+
 ## Acknowledgement
 
 CareerForge is developed as an academic and portfolio project to explore full-stack web development, external API integration, AI-assisted feedback, and practical career preparation tools.
