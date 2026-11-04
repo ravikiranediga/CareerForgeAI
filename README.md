@@ -353,3 +353,16 @@ https://github.com/ravikiranediga/CareerForgeAI
 CareerForge is developed as an academic and portfolio project to explore full-stack web development, external API integration, AI-assisted feedback, and practical career preparation tools.
 
 **CareerForge – Build your skills. Prepare with confidence. Move your career forward.**
+
+
+
+# 👨‍💻 Author
+
+**E Ravi Kiran**
+
+B.Tech – Computer Science (AI)
+
+Sri Venkatesa Perumal College of Engineering
+
+GitHub: https://github.com/ravikiranediga
+
