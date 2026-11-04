@@ -1,73 +1,60 @@
 # CareerForge
 
-CareerForge is a career-preparation web app. The code is organized by the part of the application each folder is responsible for:
+**A resume-first career preparation platform for job discovery, interview practice, and application tracking.**
+
+CareerForge brings practical job-search and preparation tools into one application. It combines a React frontend with a FastAPI backend, uses Adzuna for India-focused job listings, and offers optional Gemini-powered feedback with user consent.
+
+> **Project scope:** CareerForge is a portfolio and local-development project. Coding practice is intentionally practice-only, and applications are tracked by the user rather than submitted by CareerForge.
+
+## What it does
+
+- **Build a career profile from your resume.** Upload a text-based PDF or DOCX, review extracted details, and create a resume preview from your profile. Scanned PDFs requiring OCR are not supported.
+- **Find relevant jobs.** Search Adzuna India listings, with a focus on technical and AI/ML roles in Bengaluru, Hyderabad, and Chennai. Listings link to the original posting so you can verify details and availability.
+- **Prepare at your own pace.** Practice aptitude questions, work through coding exercises, and rehearse interview answers. Coding solutions are saved as practice and are not executed or automatically scored.
+- **Get optional AI feedback.** With explicit consent, send resume text or an interview answer to Gemini for analysis or practice feedback. AI output is advisory; it is not an ATS score, hiring decision, or guarantee of results.
+- **Track applications.** Choose one of your saved resumes, confirm before continuing, and open the employer's original application page. CareerForge records the application as **Ready to apply**; update its status yourself after applying.
+- **Keep your work organized.** Save jobs, manage your profile and resumes, and review practice progress in one place.
+
+## Product boundaries
+
+- CareerForge does **not** execute coding submissions or judge their correctness.
+- CareerForge does **not** submit applications or share resumes with employers. No authorized employer submission integration is configured.
+- Gemini features require a configured API key and your consent for each relevant submission. Provider availability, quotas, and data policies apply.
+- Resume section coverage reflects populated profile sections. It does not measure ATS compatibility or predict hiring outcomes.
+- Job data comes from Adzuna and may be cached; always check the linked employer posting for current details.
+
+## Technology
+
+| Area | Technologies |
+|---|---|
+| Frontend | React, React Router, Vite |
+| Backend | Python, FastAPI, Uvicorn |
+| Data | SQLite |
+| Job listings | Adzuna API |
+| Optional AI feedback | Google Gemini API |
+| Quality checks | Oxlint, Python `unittest`, Playwright |
+
+## How it is structured
 
 ```text
-CareerForageAi/
-|-- frontend/                 React + Vite website
-|   |-- src/
-|   |   |-- app/              App routes and dashboard layout
-|   |   |-- components/auth/  Login and registration screens
-|   |   |-- components/practice/ Practice questions and attempt feedback
-|   |   |-- components/resume/ Resume-first onboarding and resume pages
-|   |   |-- contexts/         Authentication and theme state
-|   |   |-- services/         Frontend API requests
-|   |   |-- styles/           Global styles
-|   |   `-- main.jsx          Frontend entry point
-|   |-- public/               Static images and icons
-|   |-- package.json          Frontend dependencies and commands
-|   `-- vite.config.js        Local frontend server and API proxy
-|-- backend/                  Python + FastAPI web service
-|   |-- routers/              API endpoints grouped by feature
-|   |-- main.py               Creates the API and connects the endpoint groups
-|   |-- security.py           Password hashing and login tokens
-|   |-- schemas.py            Validates API request data
-|   |-- serializers.py        Converts database rows to API responses
-|   |-- config.py             Reads backend/.env settings
-|   |-- jobs_feed.py          Fetches and caches Adzuna job listings
-|   |-- gemini.py             Server-side Gemini requests and response validation
-|   `-- requirements.txt      Python dependencies
-|-- database/                 SQLite data and database setup
-|   |-- schema.sql            Table definitions
-|   |-- practice_seed.py      Starter practice question bank
-|   |-- initialize.py         Creates tables, migrates, and seeds practice questions
-|   |-- connection.py         Opens and closes SQLite connections
-|   `-- careerforge.db        Created automatically on first backend startup
-`-- README.md                 Project setup and folder guide
+frontend/       React application, API client, and Playwright tests
+backend/        FastAPI application, feature routers, and provider adapters
+database/       SQLite schema, initialization, and practice seed data
 ```
 
-## What talks to what?
+The browser communicates with the backend over `/api`. The backend handles validation, authentication, provider requests, and database access; the browser never connects directly to SQLite. In local development, Vite proxies `/api` requests to FastAPI.
 
-1. The **frontend** displays CareerForge and sends HTTP requests to `/api`.
-2. The **backend** validates requests, checks authentication when needed, and performs the requested operation.
-3. The **database** stores accounts, resume metadata, practice attempts, jobs, applications, and saved jobs. Its tables are defined in `database/schema.sql`.
+## Run locally on Windows
 
-Inside the frontend, `src/app/` wires pages together, `src/components/` contains UI pieces, `src/contexts/` shares app state, and `src/services/` talks to the API.
+### Prerequisites
 
-The browser app does not connect directly to SQLite. All database access goes through the backend API.
+- Python 3.10 or later
+- Node.js and npm
+- Git (optional)
 
-## Resume-first accounts and real progress
+### 1. Configure and start the backend
 
-- Every new or returning account without a current resume is sent to onboarding before the dashboard.
-- Upload a text-based PDF or DOCX (maximum 8 MB). After explicit consent, extracted resume text—not the original file—is sent to Google Gemini for profile analysis. If Gemini is unavailable, the app clearly reports that it used local extraction instead. Scanned/image-only PDFs need OCR and are not supported.
-- Review, edit, or re-analyze extracted profile fields on **Profile**. Resume section coverage counts six populated sections (headline, education, skills, experience, projects, and certifications). It does not test ATS parsing or predict hiring outcomes.
-- **Aptitude** records your selected answers. **Coding Practice** is practice-only: write and save a solution, and CareerForge counts it as practiced without executing or judging it. **Interview Preparation** sends a written question and answer to Gemini only after you consent, for AI-generated practice feedback—not a hiring decision.
-- Skill scores start at 0 and are calculated from completed, scored practice attempts. Coding attempts are counted as practice, not presented as an automatically judged score.
-- The resume builder uses your profile details and browser print dialog; choose **Save as PDF** to download a generated PDF. You can also download your original uploaded file.
-- The resume builder lets you add and edit your own contact details, summary, education, skills, experience, projects, certifications, languages, and preferred roles. Review the preview before printing; do not include claims you cannot verify.
-- Job listings are refreshed from Adzuna's India API for Bengaluru, Hyderabad, and Chennai within 50 km, with AI/ML and other technical-role search terms. The feed keeps listings from up to 30 distinct employers, prioritizes AI/ML roles, and caches results for six hours. Listings are attributed and linked to the original post; confirm availability and employer details there.
-- **Job applications:** upload multiple PDF/DOCX resumes on **Profile**, choose one for a job, and confirm before continuing. CareerForge stores the selected resume reference in your private application tracker, then links to the original employer page. It does not send the resume or profile details and no authorized employer submission integration is configured. The new record starts as **Ready to apply**, not Applied; after submitting through the employer, update the tracker yourself. CareerForge does not scrape employer pages or claim an external submission.
-- Practice content includes 40 aptitude questions and 30 coding exercises. Company tags describe commonly associated interview practice and do not imply these exact questions were asked by a company.
-
-Uploaded resume files are stored under `database/uploads/` and are excluded from Git. Do not put real personal resumes in a repository or share its upload directory.
-
-## Run locally (Windows)
-
-Open two PowerShell terminals in the project root.
-
-### Terminal 1: start the backend
-
-The Python virtual environment and `backend/.env` are already project-local. If setting up a fresh copy:
+From the project root, create a virtual environment, install dependencies, and create your local environment file:
 
 ```powershell
 py -m venv backend\.venv
@@ -75,11 +62,22 @@ backend\.venv\Scripts\python.exe -m pip install -r backend\requirements.txt
 Copy-Item backend\.env.example backend\.env
 ```
 
-For a fresh copy, set `CAREERFORGE_SECRET_KEY` in `backend\.env` to a private random value at least 32 characters long. Generate one with:
+Set a private `CAREERFORGE_SECRET_KEY` in `backend\.env`. Generate a random value with:
 
 ```powershell
 py -c "import secrets; print(secrets.token_urlsafe(32))"
 ```
+
+To enable job listings and AI features, add your own Adzuna and Gemini credentials to `backend\.env`:
+
+```dotenv
+ADZUNA_APP_ID=your-adzuna-app-id
+ADZUNA_APP_KEY=your-adzuna-app-key
+GEMINI_API_KEY=your-gemini-api-key
+GEMINI_MODEL=gemini-2.5-flash
+```
+
+Adzuna listings need both Adzuna values; Gemini feedback needs a Gemini API key. These integrations are optional for running the application, but their provider-backed features will be unavailable without valid credentials.
 
 Start the API from the project root:
 
@@ -87,24 +85,11 @@ Start the API from the project root:
 backend\.venv\Scripts\python.exe -m uvicorn backend.main:app --reload
 ```
 
-The API is at `http://127.0.0.1:8000`; its interactive docs are at `http://127.0.0.1:8000/docs`.
+The API runs at `http://127.0.0.1:8000`; interactive API documentation is available at `http://127.0.0.1:8000/docs`.
 
-To enable the provider-backed features, add these values to the private
-`backend/.env` file:
+### 2. Start the frontend
 
-```text
-ADZUNA_APP_ID=your-adzuna-app-id
-ADZUNA_APP_KEY=your-adzuna-app-key
-GEMINI_API_KEY=your-gemini-api-key
-GEMINI_MODEL=gemini-2.5-flash
-```
-
-Adzuna requires both credentials. Gemini feedback and resume analysis require
-its API key. Never put provider keys in frontend environment variables. Resume
-text and interview answers are sent to Google Gemini only after the user checks
-the relevant consent box. Provider availability, quotas, and data policies apply.
-
-### Terminal 2: start the frontend
+In a second terminal:
 
 ```powershell
 cd frontend
@@ -112,61 +97,49 @@ npm install
 npm run dev
 ```
 
-Open the Vite URL (usually `http://localhost:5173`). The Vite development server forwards `/api` requests to FastAPI.
+Open the Vite URL shown in the terminal (typically `http://localhost:5173`).
 
-Run frontend checks from `frontend/`:
+## Run checks
+
+From `frontend\`, run the frontend linter and production build:
 
 ```powershell
 npm run lint
 npm run build
 ```
 
-### Browser tests
-
-Playwright tests start the frontend and a dedicated FastAPI test server. The API
-uses a temporary SQLite database and temporary resume-upload directory; seeded
-job listings and generated accounts/resumes are test-only data. Your regular
-database and uploaded resumes are not used by the test server.
-
-Run the browser suite from `frontend/`:
-
-```powershell
-npm run test:e2e
-```
-
-Run the backend provider-adapter tests from the project root (all network
-responses are mocked):
+Run the backend provider-adapter tests from the project root:
 
 ```powershell
 backend\.venv\Scripts\python.exe -m unittest backend.tests.test_provider_adapters
 ```
 
-Run with a visible browser or Playwright UI:
+Run the Playwright browser suite from `frontend\`:
 
 ```powershell
-npm run test:e2e:headed
-npm run test:e2e:ui
+npm run test:e2e
 ```
 
-The suite uses isolated provider stubs; it does not call Adzuna or Gemini, and
-therefore does not validate live credentials or provider quotas.
-It requires the project-local backend environment at
-`backend\.venv\Scripts\python.exe` on Windows (or `backend/.venv/bin/python` on
-macOS/Linux), plus the installed Playwright browser binaries. Reports and failure
-artifacts are written to `frontend\playwright-report\` and
-`frontend\test-results\`.
+The browser suite uses isolated test data and provider stubs; it does not validate live provider credentials, quotas, or availability. Playwright browser binaries may need to be installed separately on a fresh machine.
 
-## Main API routes
+## Privacy and security
 
-- Authentication: `POST /api/auth/register`, `POST /api/auth/login`, `GET /api/auth/me`
-- Jobs: `GET /api/jobs`, `GET /api/jobs/{job_id}`
-- Applications: `GET /api/applications`, `POST /api/applications` (owned `resume_id` and explicit confirmation required), `PATCH /api/applications/{id}`
-- Saved jobs: `GET /api/saved-jobs`, `POST /api/saved-jobs/{job_id}`, `DELETE /api/saved-jobs/{job_id}`
-- Profile and resumes: `GET/PATCH /api/profile`, `POST /api/profile/resume`, `POST /api/profile/resumes/{resume_id}/reanalyze`, `GET /api/profile/resumes/{resume_id}/download`
-- Practice: `GET /api/practice/questions`, `POST /api/practice/attempts`, `GET /api/practice/progress`
+- Keep `backend\.env` private. Never commit API keys, passwords, tokens, or real user data.
+- Provider keys belong only in the backend environment; do not put them in frontend code or frontend environment variables.
+- Resume text and interview answers are sent to Gemini only after the user gives the relevant consent.
+- Uploaded resumes and the SQLite database are local application data and should not be published.
+- Resume records and application tracking are scoped to the authenticated user. Confirm before continuing to an employer application page.
+- For deployment, use HTTPS, set a strong private secret, configure CORS for the deployed frontend, and choose storage appropriate for production. The included SQLite setup is for local development, not a hosted production database.
 
-## Local data and secrets
+## API overview
 
-`backend/.env` is private local configuration and must not be shared or committed. It sets the JWT secret and `CAREERFORGE_DB_PATH=database/careerforge.db`. SQLite data is stored in `database/careerforge.db`; that file is generated automatically and ignored by Git. The database is local development storage, not a hosted service.
+| Feature | Example routes |
+|---|---|
+| Authentication | `POST /api/auth/register`, `POST /api/auth/login`, `GET /api/auth/me` |
+| Jobs | `GET /api/jobs`, `GET /api/jobs/{job_id}` |
+| Applications | `GET /api/applications`, `POST /api/applications`, `PATCH /api/applications/{id}` |
+| Saved jobs | `GET /api/saved-jobs`, `POST /api/saved-jobs/{job_id}`, `DELETE /api/saved-jobs/{job_id}` |
+| Profile and resumes | `GET/PATCH /api/profile`, `POST /api/profile/resume`, `GET /api/profile/resumes/{resume_id}/download` |
+| Practice | `GET /api/practice/questions`, `POST /api/practice/attempts`, `GET /api/practice/progress` |
 
-For deployment, set a private secret in the hosting environment, configure CORS for the actual frontend URL, use HTTPS, and consider moving from SQLite to a managed database.
+For the complete interactive schema, start the backend and visit `/docs`.
